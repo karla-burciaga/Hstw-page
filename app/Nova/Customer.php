@@ -2,27 +2,24 @@
 
 namespace App\Nova;
 
-use Benjaminhirsch\NovaSlugField\Slug;
-use Benjaminhirsch\NovaSlugField\TextWithSlug;
-use GeneaLabs\NovaGutenberg\Gutenberg;
-use Illuminate\Http\Request;
-use Jackabox\DuplicateField\DuplicateField;
-use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
+use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Heading;
+use Eminiarts\Tabs\Tabs;
+use Laravel\Nova\Fields\HasMany;
 
-class Post extends Resource
+class Customer extends Resource
 {
-    /**
+     /**
      * Resource name
      * @return string
      */
     public static function label()
     {
-        return 'Artículos';
+        return 'Clientes';
     }
 
     /**
@@ -31,34 +28,34 @@ class Post extends Resource
      */
     public static function singularLabel()
     {
-        return 'Artículo';
+        return 'Cliente';
     }
-
-    public static $group = '(2) Administración de Artículos';
-    public static $displayInNavigation = false;
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\Post';
+    public static $model = 'App\Customer';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'id';
 
+    public function title (){
+        return $this->name;
+    }
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id','name'
     ];
-
+    public static $group = '(1) Administración de Usuarios';
     /**
      * Get the fields displayed by the resource.
      *
@@ -71,29 +68,17 @@ class Post extends Resource
             Heading::make('Número de Registro')->onlyOnDetail(),
             ID::make()->sortable(),
 
-            Heading::make('Imagen'),
-            Image::make('Imagen', 'image')
-                ->creationRules('required')
-                 ->updateRules('nullable'),
+            Heading::make('Datos'),
+            Text::make('Nombre', 'name'),
+            Text::make('Apellidos', 'lastname'),
+            Date::make('Fecha de Nacimiento','dateOfBirth')->format('DD MMM YYYY'),
+            Text::make('CURP','CURP'),
+            Text::make('RFC','RFC'),
+            Text::make('Correo','email'),
+            (new Tabs('Relations', [
+              HasMany::make('Direcciones','address', 'App\Nova\CustomerAddres')->singularLabel('Dirección')
+            ]))->defaultSearch(true),
 
-            Heading::make('Título'),
-            TextWithSlug::make('Título', 'title')->slug('slug'),
-            Slug::make('URL', 'slug')->showUrlPreview(env("APP_URL") . $this->slug),
-
-            Heading::make('SEO'),
-            Text::make('Título', 'seo_title')->rules('required'),
-            Textarea::make('Descripción', 'seo_description')->rules('required'),
-            Textarea::make('Keywords (Separados por coma)', 'seo_keywords')->rules('required'),
-
-            Heading::make('Contenido'),
-            Gutenberg::make('Contenido', 'content')->stacked()->hideFromIndex(),
-
-            DuplicateField::make('Duplicate')
-                ->withMeta([
-                    'resource' => 'pages', // resource url
-                    'model' => 'App\Page', // model path
-                    'id' => $this->id, // id of record
-                ]),
         ];
     }
 

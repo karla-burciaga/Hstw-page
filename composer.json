@@ -19,7 +19,6 @@
         "genealabs/nova-gutenberg": "^0.1.8",
         "infinety-es/nova-filemanager": "^2.3",
         "jackabox/nova-duplicate-field": "^0.2.7",
-        "jobcerto/nova-grid": "^1.0",
         "johnathan/nova-trumbowyg": "^1.0",
         "kirschbaum-development/nova-inline-relationship": "^0.1.0",
         "laravel/framework": "^6.0",

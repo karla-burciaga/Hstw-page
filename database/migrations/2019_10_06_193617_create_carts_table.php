@@ -20,11 +20,9 @@ class CreateCartsTable extends Migration
             $table->string('payment_method');
             $table->boolean('payment_status');
             $table->unsignedInteger('order_id');
-
             $table->string('title');
             $table->string('image');
             $table->json('details');
-            "key1" => 'bicho' => 'negro',
             $table->unsignedInteger('price');
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('total');

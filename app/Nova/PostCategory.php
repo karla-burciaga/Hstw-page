@@ -35,7 +35,7 @@ class PostCategory extends Resource
     }
 
     public static $group = '(2) Administración de Artículos';
-
+    public static $displayInNavigation = false;
     /**
      * The model the resource corresponds to.
      *
